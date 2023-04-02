@@ -122,7 +122,7 @@ app.get("/login", (req, res) => {
 //MVC
 // Model- functions which interact with database
 // utility functions- functions which does not interact with db
-app.post("/registration’", async (req, res) => {
+app.post("/registration", async (req, res) => {
   console.log(req.body, "-----");
   const { name, email, password, username, phone } = req.body;
 
@@ -302,6 +302,7 @@ app.post("/logout_from_all_devices", isAuth, async (req, res) => {
 //post books
 app.post("/create-item", isAuth, rateLimiting, async (req, res) => {
   const todoText = req.body.bookData;
+  console.log(todoText,"create-item has been hit" );
 
   //data validation
   if (!todoText) {

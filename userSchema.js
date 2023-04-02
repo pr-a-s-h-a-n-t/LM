@@ -21,9 +21,9 @@ const userSchema = new Schema({
     require: true,
   },
   phone: {
-    type: String,
+    type: Number,
     require: true,
   },
-});
+}, {strict: false});
 
 module.exports = mongoose.model("user", userSchema);
