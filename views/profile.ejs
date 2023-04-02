@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LM</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <section class="_profile">
+        <div class="_profile_header">
+            <h1>Profile Settings</h1>
+            <form action='/dashboard' method="GET">
+                <button id="back_dashboard_btn" class="_header_btn"> Dashboard</button>
+            </form>
+            <form action='/logout' method="POST">
+
+                <button id="logout_btn" class="_header_btn"> <img src="./images/profile.png" alt=""> Logout</button>
+            </form>
+        </div>
+        <hr>
+        <div class="profile_wrapper">
+            <div class="_profile_img">
+                <img src="/images/profile.png" width="100%" height="100%" alt="">
+            </div>
+            <div class=" ">
+                <h3>Name: Prashant Mishra</h3>
+                <h3>Email: prashantmishra111@outlook.com</h3>
+            </div>
+            <form action='/logout_from_all_devices' method="POST">
+
+                <button id="all_devices_logout_btn" class="_header_btn"> <img src="./images//allDevice.jpg" alt="">
+                    Logout from all Devices</button>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>

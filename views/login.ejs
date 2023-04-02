@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .section {
+            width: 100vw;
+            height: 100vh;
+
+        }
+
+
+        .login-form {
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .login-form>form {
+
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .section>h4 {
+            text-align: center;
+            margin: 6rem 0;
+
+        }
+
+        .login-form>form>input {
+            width: 25rem;
+            height: 3rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid black;
+            border-radius: 0.2rem;
+            padding-left: 1rem;
+        }
+
+        .login-form>form>button {
+            width: 25rem;
+            height: 3.2rem;
+            background-color: black;
+            color: white;
+        }
+
+        .login-form>form>span {
+            margin-top: 1rem;
+            font-size: 1rem;
+            /* margin-left: 1.8rem; */
+
+            color: black;
+        }
+
+        .login-form>form>span>a {
+            color: black;
+        }
+
+        h4 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <h4>Login</h4>
+        <div class="login-form">
+            <form action='/login' method="POST">  
+                 
+                <label for="loginId">Email or Username : </label>
+                <input type="text" placeholder="Enter Email or Username" name="loginId" required>
+                <label for="password">Password : </label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+                <button type="submit">Login</button>
+                <span><a href="">Forgot your password? </a> / <a href="">Create account</a>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>

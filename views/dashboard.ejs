@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lM</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Inventory Management</h1>
+        <form action='/profile' method="GET">
+            <button class="_header_btn"> <img src="./images/profile.png" alt=""> Profile</button>
+        </form>
+    </header>
+    <hr>
+    <section>
+        <nav>
+
+            <form id="create_form">
+                <div class="input-wrapper">
+                    <label for="title">Title : </label>
+                    <input type="text" placeholder="Enter Title Here" id="title" name="title" required>
+                </div>
+                <div class="input-wrapper">
+                    <label for="author">Author : </label>
+                    <input type="text" placeholder="Enter Author Name" id="author" name="author" required>
+                </div>
+                <div class="input-wrapper">
+                    <label for="price">Price : </label>
+                    <input type="number" placeholder="Enter Price" id="price" name="price" required>
+                </div>
+                <div class="input-wrapper">
+                    <label for="category">Category : </label>
+                    <input type="text" placeholder="Select Category" id="category" name="category" required>
+                </div>
+
+                <button class="add_item"> Add Book </button>
+            </form>
+        </nav>
+        <hr>
+        <main>
+            <h2>All Books</h2>
+            <div class=" cards_wrapper">
+                    <!-- card1 -->
+                    <div class="book_card">
+                        <h3>A Very Very Big Book Title Here.</h3>
+                        <div class="price_author_wrapper">
+                            <h6>By Author Name</h6>
+                            <h6>Price</h6>
+                        </div>
+                        <h4>Book Category</h4>
+                        <div class="btn-wrapper">
+                            <button class="card_update_btn">Update</button>
+                            <button class="card_delete_btn">Delete</button>
+                        </div>
+                    </div>
+                    <!-- 
+                <div class="book_card">
+                    <h3>A Very Very Big Book Title Here.</h3>
+                    <div class="price_author_wrapper">
+                        <h6>By Author Name</h6>
+                        <h6>Price</h6>
+                    </div>
+                    <h4>Book Category</h4>
+                    <div class="btn-wrapper">
+                        <button class="card_update_btn">Update</button>
+                        <button class="card_delete_btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="book_card">
+                    <h3>A Very Very Big Book Title Here.</h3>
+                    <div class="price_author_wrapper">
+                        <h6>By Author Name</h6>
+                        <h6>Price</h6>
+                    </div>
+                    <h4>Book Category</h4>
+                    <div class="btn-wrapper">
+                        <button class="card_update_btn">Update</button>
+                        <button class="card_delete_btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="book_card">
+                    <h3>A Very Very Big Book Title Here.</h3>
+                    <div class="price_author_wrapper">
+                        <h6>By Author Name</h6>
+                        <h6>Price</h6>
+                    </div>
+                    <h4>Book Category</h4>
+                    <div class="btn-wrapper">
+                        <button class="card_update_btn">Update</button>
+                        <button class="card_delete_btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="book_card">
+                    <h3>A Very Very Big Book Title Here.</h3>
+                    <div class="price_author_wrapper">
+                        <h6>By Author Name</h6>
+                        <h6>Price</h6>
+                    </div>
+                    <h4>Book Category</h4>
+                    <div class="btn-wrapper">
+                        <button class="card_update_btn">Update</button>
+                        <button class="card_delete_btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="book_card">
+                    <h3>A Very Very Big Book Title Here.</h3>
+                    <h6>By Author Name</h6>
+                    <h4>Book Category</h4>
+                    <div class="btn-wrapper">
+                        <button class="card_update_btn">Update</button>
+                        <button class="card_delete_btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="book_card">
+                    <h3>A Very Very Big Book Title Here.</h3>
+                    <h6>By Author Name</h6>
+                    <h4>Book Category</h4>
+                    <div class="btn-wrapper">
+                        <button class="card_update_btn">Update</button>
+                        <button class="card_delete_btn">Delete</button>
+                    </div>
+                </div>
+
+                <div class="book_card">
+                    <h3>A Very Very Big Book Title Here.</h3>
+                    <h6>By Author Name</h6>
+                    <h4>Book Category</h4>
+                    <div class="btn-wrapper">
+                        <button class="card_update_btn">Update</button>
+                        <button class="card_delete_btn">Delete</button>
+                    </div>
+                </div> -->
+
+
+                    </div>
+                    </main>
+    </section>
+
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+    <script type="text/javascript" src="/browser.js"> </script>
+</body>
+
+</html>

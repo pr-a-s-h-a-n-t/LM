@@ -1,0 +1,2 @@
+the functions present in this  folder 
+does not interact with the db.
