@@ -12,19 +12,34 @@
         .section {
             width: 100%;
             height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
             /* border: 1px solid red;  */
+        }
+
+        h1 {
+            margin: auto;
         }
 
         .signup-form {
             /* border: 1px solid red; */
-            padding-left: 37%;
+
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            width: 90%;
         }
+
 
         .signup-form>form {
 
             display: flex;
             flex-direction: column;
-
+            width: 90%;
         }
 
         .section>h4 {
@@ -34,7 +49,7 @@
         }
 
         .signup-form>form>input {
-            width: 25rem;
+            width: 40rem;
             height: 3rem;
             margin-bottom: 1.25rem;
             border: 1px solid black;
@@ -43,17 +58,34 @@
         }
 
         .signup-form>form>button {
-            width: 25rem;
+            max-width: 100%;
             height: 3.2rem;
             background-color: black;
             color: white;
+        }
+
+        button {
+            max-width: 90%;
+            margin: auto;
+        }
+
+        @media screen and (max-width: 568px) {
+
+            input {
+                max-width: 100% !important;
+                height: 0.8rem;
+            }
+
+            bottom {
+                max-width: 100% !important;
+            }
         }
     </style>
 </head>
 
 <body>
     <section class="section">
-        <h4>Create Account</h4>
+        <h1>Create Account</h1>
         <div class="signup-form">
             <form action='/registration' method="POST">
                 <label for="name">Name : </label>
