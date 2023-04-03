@@ -1,4 +1,3 @@
- 
 // Imports--
 const express = require("express");
 
@@ -31,9 +30,9 @@ const bookSchema = require("./models/LibraryModel");
 
 const { isAuth } = require("./middleWares/AuthMiddleWare");
 
-const TodoModel = require("./models/LibraryModel");
+// const TodoModel = require("./models/LibraryModel");
 
-const { rateLimiting } = require("./middleWares/rateLimiting.js");
+const { rateLimiting } = require("./middleWares/RateLimiting.js");
 
 // Variables--
 
@@ -93,13 +92,7 @@ app.get("/login", (req, res) => {
   return res.render("login");
 });
 
-// app.get("/dashboard", (req, res) => {
-//   return res.render("dashboard");
-// });
-
-// app.get("/profile", (req, res) => {
-//   return res.render("profile");
-// });
+ 
 
 // end point for signup and login page to post the data to the server!!
 //remember we have to use middleware because by default the data is url-encoded format so we need to type cast into the json formate
@@ -177,7 +170,6 @@ app.post("/registration", async (req, res) => {
   }
 });
 
-
 app.get("/verify/:token", async (req, res) => {
   console.log(req.params);
   const token = req.params.token;
@@ -240,6 +232,13 @@ app.post("/login", async (req, res) => {
         message: "User not found, Please register first",
       });
     }
+    console.log(userDb);
+    if (!userDb.emailAuthenticated) {
+      return res.send({
+        status: 400,
+        message: "Please verify your email before login",
+      });
+    }
 
     //password compare bcrypt.compare
     const isMatch = await bcrypt.compare(password, userDb.password);
@@ -252,7 +251,6 @@ app.post("/login", async (req, res) => {
     }
 
     //Add session base auth sys
-    console.log(req.session);
     req.session.isAuth = true;
     req.session.user = {
       username: userDb.username,
@@ -316,29 +314,30 @@ app.post("/logout_from_all_devices", isAuth, async (req, res) => {
 });
 
 //post books
-app.post("/create-item", async (req, res) => {
-  console.log(req.body, "server has got an req");
-  const { title, author, price, category } = req.body;
+app.post("/create-item", isAuth, async (req, res) => {
+  console.log(req.session.user.username, "server has got an req");
 
-  // console.log(req.session , "username");
+  const { title, author, price, category } = req.body.book;
 
+  console.log(req.body, "ssssssssssss");
   //intialize todo schema and store it in Db
-  const book = new bookSchema({
-    tile: title,
-    author: author,
-    price: price,
-    category: category,
-    // username : req.session.user.username,
-  });
 
   // res.send("saved book: " + bookDB);
   try {
-    const bookDB = await book.save();
+    const Book = new bookSchema({
+      tile: title,
+      author: author,
+      price: price,
+      category: category,
+      username: req.session.user.username,
+    });
 
-    console.log(bookDB);
+    const bookDB = await Book.save();
+
+    console.log(bookDB, " data saved");
     return res.send({
       status: 201,
-      message: "Todo created successfully",
+      message: "book added successfully",
       data: bookDB,
     });
   } catch (error) {
@@ -352,21 +351,23 @@ app.post("/create-item", async (req, res) => {
 });
 
 app.get("/read-item", async (req, res) => {
-  console.log(req.session.user, "username");
+  // console.log(req.session.user.username, "read item");
   const user_name = req.session.user.username;
   try {
-    const todos = await TodoModel.find({ username: user_name });
+    const book = await bookSchema.find({ username: user_name });
 
-    if (todos.length === 0)
+    // console.log(book, "sssssssssss")
+
+    if (book.length === 0)
       return res.send({
-        status: 400,
+        status: 200,
         message: "Todo is empty, Please create some.",
       });
 
     return res.send({
       status: 200,
       message: "Read Success",
-      data: todos,
+      data: book,
     });
   } catch (error) {
     return res.send({
@@ -376,52 +377,85 @@ app.get("/read-item", async (req, res) => {
     });
   }
 });
-// app.post("/edit-item", isAuth, async (req, res) => {
-//   console.log(req.body);
 
-//   const { id, newData } = req.body;
+app.post("/edit-item", isAuth, async (req, res) => {
+  console.log(req.body);
 
-//   //data validation
-//   if (!id || !newData) {
-//     return res.send({
-//       status: 400,
-//       message: "Missing credentials",
-//     });
-//   }
-//   if (typeof newData !== "string") {
-//     return res.send({
-//       status: 400,
-//       message: "Invalid Todo format",
-//     });
-//   }
+  const { id, field, newData } = req.body;
 
-//   if (newData.length > 100) {
-//     return res.send({
-//       status: 400,
-//       message: "Todo is too long, should be less than 100 char.",
-//     });
-//   }
+  //data validation
+  if (!id || !newData) {
+    return res.send({
+      status: 400,
+      message: "Missing credentials",
+    });
+  }
+  if (typeof newData !== "string") {
+    return res.send({
+      status: 400,
+      message: "Invalid Todo format",
+    });
+  }
 
-//   try {
-//     const todoDb = await TodoModel.findOneAndUpdate(
-//       { _id: id },
-//       { todo: newData }
-//     );
-//     console.log(todoDb);
+  // if (newData.length > 100) {
+  //   return res.send({
+  //     status: 400,
+  //     message: "Todo is too long, should be less than 100 char.",
+  //   });
+  // }
 
-//     return res.send({
-//       status: 200,
-//       message: "Todo updated Successfully",
-//       data: todoDb,
-//     });
-//   } catch (error) {
-//     return res.send({
-//       status: 500,
-//       message: "Database error",
-//       error: error,
-//     });
-//   }
-// });
+  try {
+    const todoDb = await bookSchema.findOneAndUpdate(
+      { _id: id },
+      { [field]: newData }
+    );
+    console.log(todoDb, "findOn============");
+    let temp = { ...todoDb, [field]: newData };
+    return res.send({
+      status: 200,
+      message: "Todo updated Successfully",
+      data: temp,
+    });
+  } catch (error) {
+    console.log(error, "dddddd");
+    return res.send({
+      status: 500,
+      message: "Database error",
+      error: error,
+    });
+  }
+});
+
+app.post("/delete-item", isAuth, async (req, res) => {
+  console.log(req.body, "delete api hit");
+
+  const id = req.body.id;
+
+  //data validation
+  if (!id) {
+    return res.send({
+      status: 400,
+      message: "Missing credentials",
+    });
+  }
+
+  try {
+    const todoDb = await bookSchema.findOneAndDelete({ _id: id });
+    console.log(todoDb);
+
+    return res.send({
+      status: 200,
+      message: "Todo deleted Successfully",
+      data: todoDb,
+    });
+  } catch (error) {
+    return res.send({
+      status: 500,
+      message: "Database error",
+      error: error,
+    });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(

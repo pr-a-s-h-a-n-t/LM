@@ -33,7 +33,7 @@ document.addEventListener("click", function (event) {
       category: category.value,
     };
 
-console.log(bookData, "book data");
+    console.log(bookData, "book data");
     axios
       .post("/create-item", { book: bookData })
       .then((res) => {
@@ -42,6 +42,25 @@ console.log(bookData, "book data");
           alert(res.data.message);
         }
         bookData = "";
+        // generateTodos();
+
+        console.log(res.data, "data in browser");
+        document.getElementById("cards_wrapper").insertAdjacentHTML(
+          "beforeend",
+          `<div id= ${res.data.data._id}  class="book_card">
+          <h3 class="title"> ${res.data.data.title}</h3>
+         <div class="price_author_wrapper">
+          <h6 class="author">${res.data.data.author}</h6>
+          <h6 class="price" >${res.data.data.price}</h6>
+      </div>
+      <h4 class="category">${res.data.data.category}</h4>
+      <div class="btn-wrapper">
+        <button data-id="${res.data.data._id}" class="card_update_btn">Edit</button>
+        <button data-id="${res.data.data._id}"  class="card_delete_btn">Delete</button>
+        </div>
+     
+    </div>`
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -51,13 +70,14 @@ console.log(bookData, "book data");
     // return;
   }
 
-  if (event.target.classList.contains("edit-me")) {
+  if (event.target.classList.contains("card_update_btn")) {
     const id = event.target.getAttribute("data-id");
+    const field = prompt("choose your field");
     const newData = prompt("Enter your new todo text");
 
-    console.log(id, newData);
+    console.log(id, newData, "edit btn has been hit");
     axios
-      .post("/edit-item", { id, newData })
+      .post("/edit-item", { id, field, newData })
       .then((res) => {
         if (res.data.status !== 200) {
           console.log("ere");
@@ -65,17 +85,18 @@ console.log(bookData, "book data");
           return;
         }
 
-        event.target.parentElement.parentElement.querySelector(
-          ".item-text"
-        ).innerHTML = newData;
+        let fp = document.getElementById(`${id}`);
+        fp.querySelector(`.` + field).innerHTML = newData;
       })
       .catch((err) => {
         console.log(err);
         alert(err);
       });
   }
-  if (event.target.classList.contains("delete-me")) {
+  if (event.target.classList.contains("card_delete_btn")) {
     const id = event.target.getAttribute("data-id");
+
+    console.log(id, "delete btn has been hit");
 
     axios
       .post("/delete-item", { id })
@@ -106,25 +127,31 @@ window.onload = function () {
 function generateTodos() {
   //read the todos
   axios
-    .get("/read-item")
+    .get("http://localhost:8080/read-item")
     .then((res) => {
       if (res.data.status !== 200) {
         alert(res.data.message);
         return;
       }
-      const todos = res.data.data;
-      console.log(todos);
-      document.getElementById("item_list").insertAdjacentHTML(
+      const apple = res.data.data;
+      console.log(apple, "ssssssssssssss");
+      document.getElementById("cards_wrapper").insertAdjacentHTML(
         "beforeend",
-        todos
+        apple
           .map((item) => {
-            return `<li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-          <span class="item-text"> ${item.todo}</span>
-          <div>
-          <button data-id="${item._id}" class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
-          <button data-id="${item._id}" class="delete-me btn btn-danger btn-sm">Delete</button>
-      </div>
-      </li>`;
+            return `<div id= ${item._id}  class="book_card">
+            <h3 class="title"> ${item.title}</h3>
+           <div class="price_author_wrapper">
+            <h6 class="author">${item.author}</h6>
+            <h6 class="price" >${item.price}</h6>
+        </div>
+        <h4 class="category">${item.category}</h4>
+        <div class="btn-wrapper">
+          <button data-id="${item._id}" class="card_update_btn">Edit</button>
+          <button data-id="${item._id}"  class="card_delete_btn">Delete</button>
+          </div>
+       
+      </div>`;
           })
           .join("")
       );
@@ -134,4 +161,26 @@ function generateTodos() {
     });
 }
 
-//CRUD
+/*
+document.getElementById("cards_wrapper").insertAdjacentHTML(
+    "beforeend",
+    apple
+      .map((item) => {
+        return `<div class="book_card">
+        <h3> ${item.title}</h3>
+       <div class="price_author_wrapper">
+        <h6>${item.author}</h6>
+        <h6>${item.price}</h6>
+    </div>
+    <h4>${item.category}</h4>
+    <div class="btn-wrapper">
+      <button data-id="${item._id}" class="card_update_btn">Edit</button>
+      <button data-id="${item._id}"  class="card_delete_btn">Delete</button>
+      </div>
+   
+  </div>`;
+      })
+      .join("")
+  );
+
+*/

@@ -112,7 +112,7 @@ h2 {
 
   color: #ffffff;
 }
-.cards_wrapper {
+#cards_wrapper {
   width: 100%;
   margin-top: 50px;
   display: flex;
@@ -127,6 +127,7 @@ h2 {
   height: 285px;
   border-radius: 5px;
   padding: 14px 8px;
+  word-break: break-all;
 }
 
 h3,

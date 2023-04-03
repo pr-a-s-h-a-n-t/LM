@@ -10,22 +10,20 @@ const bookSchema = new Schema({
   author: {
     type: String,
     require: true,
-    // unique: true,
+    unique: true,
   },
   price: {
     type: Number,
     require: true,
-    // unique: true,
+    unique: true,
   },
   category: {
     type: String,
     require: true,
   },
-  username : {
+  username: {
     type: String,
     require: true,
-    unique: true,
-
   },
 } , {strict: false});
 
