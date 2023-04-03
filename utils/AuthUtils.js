@@ -61,7 +61,7 @@ const sendVerificationToken = (email, verificationToken) => {
     from: "Library Management ",
     to: email,
     subject: "Email verification for Library Management application",
-    html: `click the below link to verify your email<a href="http://localhost:8080/verify/${verificationToken}">Here</a>`,
+    html: `click the below link to verify your email<a href="https://librarymanagementapp.onrender.com/verify/${verificationToken}">Here</a>`,
   };
 
   mailer.sendMail(mailOptions, function (err, response) {
