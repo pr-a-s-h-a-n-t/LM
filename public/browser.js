@@ -127,7 +127,7 @@ window.onload = function () {
 function generateTodos() {
   //read the todos
   axios
-    .get("http://localhost:8080/read-item")
+    .get("/read-item")
     .then((res) => {
       if (res.data.status !== 200) {
         alert(res.data.message);
