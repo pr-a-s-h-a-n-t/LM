@@ -32,7 +32,7 @@ const { isAuth } = require("./middleWares/AuthMiddleWare");
 
 // const TodoModel = require("./models/LibraryModel");
 
-const { rateLimiting } = require("./middleWares/RateLimiting.js");
+const { rateLimiting } = require("./middleWares/RateLimiting");
 
 // Variables--
 

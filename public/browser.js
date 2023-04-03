@@ -160,27 +160,3 @@ function generateTodos() {
       console.log(err);
     });
 }
-
-/*
-document.getElementById("cards_wrapper").insertAdjacentHTML(
-    "beforeend",
-    apple
-      .map((item) => {
-        return `<div class="book_card">
-        <h3> ${item.title}</h3>
-       <div class="price_author_wrapper">
-        <h6>${item.author}</h6>
-        <h6>${item.price}</h6>
-    </div>
-    <h4>${item.category}</h4>
-    <div class="btn-wrapper">
-      <button data-id="${item._id}" class="card_update_btn">Edit</button>
-      <button data-id="${item._id}"  class="card_delete_btn">Delete</button>
-      </div>
-   
-  </div>`;
-      })
-      .join("")
-  );
-
-*/
