@@ -94,6 +94,10 @@ app.get("/resetpassword", (req, res) => {
   return res.render("resetpassword");
 });
 
+app.get("/newpassword", (req, res) => {
+  return res.render("newpassword");
+});
+
 // end point for signup and login page to post the data to the server!!
 //remember we have to use middleware because by default the data is url-encoded format so we need to type cast into the json formate
 //
