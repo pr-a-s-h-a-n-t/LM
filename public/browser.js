@@ -2,7 +2,7 @@ let skip = 0;
 
 document.addEventListener("click", function (event) {
   if (event.target.classList.contains("add_item")) {
-    // event.preventDefault();
+    event.preventDefault();
     console.log("add item");
     const title = document.getElementById("title");
     const author = document.getElementById("author");
@@ -32,6 +32,7 @@ document.addEventListener("click", function (event) {
       price: price.value,
       category: category.value,
     };
+
 console.log(bookData, "book data");
     axios
       .post("/create-item", { book: bookData })

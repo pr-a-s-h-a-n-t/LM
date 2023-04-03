@@ -16,8 +16,6 @@
 //   res.render('about')
 // })
 
-
-
 // app.listen(PORT, () => {
 //   console.log(`Example app listening on port ${PORT}`)
 // })
@@ -38,14 +36,23 @@ const session = require("express-session");
 
 const mongoDbSession = require("connect-mongodb-session")(session);
 
+const jwt = require("jsonwebtoken");
+
 // File imports--
-const { cleanUpAndValidate } = require("./utils/AuthUtils");
+const {
+  cleanUpAndValidate,
+  generateJWTToken,
+  sendVerificationToken,
+  SECRET_KEY,
+} = require("./utils/AuthUtils");
 
 const userSchema = require("./userSchema");
 
+const bookSchema = require("./models/LibraryModel");
+
 const { isAuth } = require("./middleWares/AuthMiddleWare");
 
-const TodoModel = require("./models/libraryModel");
+const TodoModel = require("./models/LibraryModel");
 
 const { rateLimiting } = require("./middleWares/rateLimiting.js");
 
@@ -162,31 +169,60 @@ app.post("/registration", async (req, res) => {
       phone: phone,
     });
 
+    const verificationToken = generateJWTToken(email);
+    console.log(verificationToken);
+
     try {
       const userDb = await user.save();
-      console.log(userDb, "userDb saved");
+      sendVerificationToken(email, verificationToken);
+      console.log(userDb);
+
       return res.send({
-        status: 201,
-        message: "User register successfully",
-        data: userDb,
+        status: 200,
+        message: "Please verify your email before login",
       });
     } catch (error) {
+      console.log(error);
       return res.send({
-        status: 500,
-        message: "Database error",
+        status: 401,
+        message: "Data Base error",
         error: error,
       });
     }
   } catch (error) {
-    console.log(error);
     return res.send({
-      status: 400,
-      message: "Data Invalid",
+      status: 401,
       error: error,
     });
   }
 });
 
+
+app.get("/verify/:token", async (req, res) => {
+  console.log(req.params);
+  const token = req.params.token;
+
+  jwt.verify(token, SECRET_KEY, async (err, decodedData) => {
+    if (err) throw err;
+    console.log(decodedData);
+
+    try {
+      const userDb = await UserSchema.findOneAndUpdate(
+        { email: decodedData.email },
+        { emailAuthenticated: true }
+      );
+
+      console.log(userDb);
+      return res.status(200).redirect("/login");
+    } catch (error) {
+      return res.send({
+        status: 400,
+        message: "Invalid Authentication Link",
+        error: error,
+      });
+    }
+  });
+});
 //data validations
 
 app.post("/login", async (req, res) => {
@@ -300,46 +336,57 @@ app.post("/logout_from_all_devices", isAuth, async (req, res) => {
 });
 
 //post books
-app.post("/create-item", isAuth, rateLimiting, async (req, res) => {
-  const todoText = req.body.bookData;
-  console.log(todoText,"create-item has been hit" );
+app.post("/create-item", async (req, res) => {
+  console.log(req.body, "server has got an req");
+  const { title, author, price, category } = req.body;
 
-  //data validation
-  if (!todoText) {
-    return res.send({
-      status: 400,
-      message: "Todo is Empty",
-    });
-  }
-
-  if (typeof todoText !== "string") {
-    return res.send({
-      status: 400,
-      message: "Invalid Todo format",
-    });
-  }
-
-  if (todoText.length > 100) {
-    return res.send({
-      status: 400,
-      message: "Todo is too long, should be less than 100 char.",
-    });
-  }
+  // console.log(req.session , "username");
 
   //intialize todo schema and store it in Db
-  const todo = new TodoModel({
-    todo: todoText,
-    username: req.session.user.username,
+  const book = new bookSchema({
+    tile: title,
+    author: author,
+    price: price,
+    category: category,
+    // username : req.session.user.username,
   });
 
+  // res.send("saved book: " + bookDB);
   try {
-    const todoDb = await todo.save();
+    const bookDB = await book.save();
 
-    // console.log(todo);
+    console.log(bookDB);
     return res.send({
       status: 201,
       message: "Todo created successfully",
-      data: todoDb,
+      data: bookDB,
+    });
+  } catch (error) {
+    console.log(error, "Error saving");
+    return res.send({
+      status: 500,
+      message: "Database error",
+      error: error,
+    });
+  }
+});
+
+app.get("/read-item", async (req, res) => {
+  console.log(req.session.user, "username");
+  const user_name = req.session.user.username;
+  try {
+    const todos = await TodoModel.find({ username: user_name });
+
+    if (todos.length === 0)
+      return res.send({
+        status: 400,
+        message: "Todo is empty, Please create some.",
+      });
+
+    return res.send({
+      status: 200,
+      message: "Read Success",
+      data: todos,
     });
   } catch (error) {
     return res.send({
@@ -349,6 +396,52 @@ app.post("/create-item", isAuth, rateLimiting, async (req, res) => {
     });
   }
 });
+// app.post("/edit-item", isAuth, async (req, res) => {
+//   console.log(req.body);
+
+//   const { id, newData } = req.body;
+
+//   //data validation
+//   if (!id || !newData) {
+//     return res.send({
+//       status: 400,
+//       message: "Missing credentials",
+//     });
+//   }
+//   if (typeof newData !== "string") {
+//     return res.send({
+//       status: 400,
+//       message: "Invalid Todo format",
+//     });
+//   }
+
+//   if (newData.length > 100) {
+//     return res.send({
+//       status: 400,
+//       message: "Todo is too long, should be less than 100 char.",
+//     });
+//   }
+
+//   try {
+//     const todoDb = await TodoModel.findOneAndUpdate(
+//       { _id: id },
+//       { todo: newData }
+//     );
+//     console.log(todoDb);
+
+//     return res.send({
+//       status: 200,
+//       message: "Todo updated Successfully",
+//       data: todoDb,
+//     });
+//   } catch (error) {
+//     return res.send({
+//       status: 500,
+//       message: "Database error",
+//       error: error,
+//     });
+//   }
+// });
 
 app.listen(PORT, () => {
   console.log(

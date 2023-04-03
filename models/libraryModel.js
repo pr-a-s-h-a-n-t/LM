@@ -10,21 +10,23 @@ const bookSchema = new Schema({
   author: {
     type: String,
     require: true,
-    unique: true,
+    // unique: true,
   },
   price: {
-    type: String,
+    type: Number,
     require: true,
-    unique: true,
+    // unique: true,
   },
   category: {
     type: String,
     require: true,
   },
-  user: {
+  username : {
     type: String,
     require: true,
-  },
-});
+    unique: true,
 
-module.exports = mongoose.model("books", bookSchema);
+  },
+} , {strict: false});
+
+module.exports = mongoose.model("book", bookSchema);
