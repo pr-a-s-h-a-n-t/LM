@@ -30,6 +30,11 @@ const userSchema = new Schema(
       require: true,
       default: false,
     },
+    resetPassword: {
+      type: Boolean,
+      // require: false,
+      default: false,
+    },
   },
   { strict: false }
 );

@@ -52,9 +52,9 @@ document.addEventListener("click", function (event) {
          <div class="price_author_wrapper">
           <h6 class="author">${res.data.data.author}</h6>
           <h6 class="price" >${res.data.data.price}</h6>
-      </div>
-      <h4 class="category">${res.data.data.category}</h4>
-      <div class="btn-wrapper">
+         </div>
+        <h4 class="category">${res.data.data.category}</h4>
+        <div class="btn-wrapper">
         <button data-id="${res.data.data._id}" class="card_update_btn">Edit</button>
         <button data-id="${res.data.data._id}"  class="card_delete_btn">Delete</button>
         </div>

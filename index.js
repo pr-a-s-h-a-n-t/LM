@@ -30,8 +30,6 @@ const bookSchema = require("./models/libraryModel");
 
 const { isAuth } = require("./middleWares/AuthMiddleWare");
 
- 
-
 const { rateLimiting } = require("./middleWares/rateLimiting");
 
 // Variables--
@@ -92,7 +90,9 @@ app.get("/login", (req, res) => {
   return res.render("login");
 });
 
- 
+app.get("/resetpassword", (req, res) => {
+  return res.render("resetpassword");
+});
 
 // end point for signup and login page to post the data to the server!!
 //remember we have to use middleware because by default the data is url-encoded format so we need to type cast into the json formate
@@ -140,10 +140,11 @@ app.post("/registration", async (req, res) => {
       username: username,
       phone: phone,
       emailAuthenticated: false,
+      resetPassword: false,
     });
 
     const verificationToken = generateJWTToken(email);
-    console.log(verificationToken);
+    // console.log(verificationToken);
 
     try {
       const userDb = await user.save();
@@ -171,21 +172,29 @@ app.post("/registration", async (req, res) => {
 });
 
 app.get("/verify/:token", async (req, res) => {
-  console.log(req.params);
+  console.log(req.params, "inside verify");
   const token = req.params.token;
 
   jwt.verify(token, SECRET_KEY, async (err, decodedData) => {
     if (err) throw err;
-    console.log(decodedData);
-
+    
     try {
-      const userDb = await userSchema.findOneAndUpdate(
-        { email: decodedData.email },
-        { emailAuthenticated: true }
-      );
+      const usercheckDb = await userSchema.findOne({
+        email: decodedData.email,
+      });
 
-      console.log(userDb);
-      return res.status(200).redirect("/login");
+      
+      if (usercheckDb.resetPassword) {
+        return res.status(200).redirect("/newpassword");
+      } else {
+        const userDb = await userSchema.findOneAndUpdate(
+          { email: decodedData.email },
+          { emailAuthenticated: true }
+        );
+
+        console.log(userDb);
+        return res.status(200).redirect("/login");
+      }
     } catch (error) {
       return res.send({
         status: 400,
@@ -193,9 +202,11 @@ app.get("/verify/:token", async (req, res) => {
         error: error,
       });
     }
+
+    
   });
 });
-//data validations
+ 
 
 app.post("/login", async (req, res) => {
   //validate the data
@@ -264,6 +275,61 @@ app.post("/login", async (req, res) => {
     return res.send({
       status: 500,
       message: "Database error",
+      error: error,
+    });
+  }
+});
+
+app.post("/reset", async (req, res) => {
+  console.log(req.body);
+  const { loginId } = req.body;
+  console.log(loginId, "reset email");
+
+  const verificationToken = generateJWTToken(loginId);
+  console.log(verificationToken, "verification token");
+  try {
+    const userDb = await userSchema.findOneAndUpdate(
+      { email: loginId },
+      { resetPassword: true }
+    );
+
+    console.log(userDb, "this is user db after updating reset password");
+
+    sendVerificationToken(loginId, verificationToken);
+    // console.log(userDb);
+
+    return res.send({
+      status: 200,
+      message: "Please verify your email and for resetting the password ",
+    });
+    // return res.status(200).redirect("/newpassword");
+  } catch (error) {
+    return res.send({
+      status: 400,
+      message: "Invalid email ",
+      error: error,
+    });
+  }
+});
+
+app.post("/updatepassword",   async (req, res) => {
+  const { password, loginId } = req.body;
+  console.log(req.body, "new Password form user");
+ 
+  
+  try {
+    let saltRound = 10;
+    const hashPassword = await bcrypt.hash(password, saltRound);
+    const userDb = await userSchema.findOneAndUpdate(
+      { email: loginId },
+      { password: hashPassword }
+      // { "$set": { "name": name, "genre": genre, "author": author, "similar": similar}}
+    );
+    return res.status(200).redirect("/login");
+  } catch (error) {
+    return res.send({
+      status: 500,
+      message: "Logout Failed",
       error: error,
     });
   }
@@ -405,15 +471,15 @@ app.post("/edit-item", isAuth, async (req, res) => {
   // }
 
   try {
-    const todoDb = await bookSchema.findOneAndUpdate(
+    const bookDB = await bookSchema.findOneAndUpdate(
       { _id: id },
       { [field]: newData }
     );
-    console.log(todoDb, "findOn============");
-    let temp = { ...todoDb, [field]: newData };
+
+    let temp = { ...bookDB, [field]: newData };
     return res.send({
       status: 200,
-      message: "Todo updated Successfully",
+      message: "books updated Successfully",
       data: temp,
     });
   } catch (error) {
@@ -440,13 +506,13 @@ app.post("/delete-item", isAuth, async (req, res) => {
   }
 
   try {
-    const todoDb = await bookSchema.findOneAndDelete({ _id: id });
-    console.log(todoDb);
+    const bookDB = await bookSchema.findOneAndDelete({ _id: id });
+    console.log(bookDB);
 
     return res.send({
       status: 200,
       message: "Todo deleted Successfully",
-      data: todoDb,
+      data: bookDB,
     });
   } catch (error) {
     return res.send({

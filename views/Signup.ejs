@@ -39,7 +39,7 @@
 
             display: flex;
             flex-direction: column;
-            width: 90%;
+            /* width: 90%; */
         }
 
         .section>h4 {
@@ -57,27 +57,31 @@
             padding-left: 1rem;
         }
 
-        .signup-form>form>button {
-            max-width: 100%;
-            height: 3.2rem;
-            background-color: black;
-            color: white;
-        }
+        .signup-form>form>button {}
 
-        button {
-            max-width: 90%;
-            margin: auto;
-        }
+        
 
-        @media screen and (max-width: 568px) {
+        @media screen and (max-width: 768px) {
 
             input {
-                max-width: 100% !important;
+                max-width: 60% !important;
                 height: 0.8rem;
+                margin: auto;
             }
 
-            bottom {
-                max-width: 100% !important;
+            #sub_btn{
+                max-width: 250px;
+                height: 3.2rem;
+                margin: auto;
+
+                background-color: black !important;
+                color: white;
+            }
+
+            label {
+                max-width: 60% !important;
+                height: 0.8rem;
+                margin: 8px auto;
             }
         }
     </style>
@@ -98,8 +102,7 @@
                 <input type="text" placeholder="Enter Username" name="username" required>
                 <label for="password">Password : </label>
                 <input type="password" placeholder="Enter Password" name="password" required>
-                <button type="submit">Register</button>
-
+                <button id="sub_btn" type="submit">Register</button>
             </form>
         </div>
 
