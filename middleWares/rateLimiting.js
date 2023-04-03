@@ -1,4 +1,4 @@
-const AccessModel = require("../models/AccessModel");
+const AccessModel = require("../models/accessModel");
 
 const rateLimiting = async (req, res, next) => {
   const sessionId = req.session.id;

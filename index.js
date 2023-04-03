@@ -26,13 +26,13 @@ const {
 
 const userSchema = require("./userSchema");
 
-const bookSchema = require("./models/LibraryModel");
+const bookSchema = require("./models/libraryModel");
 
 const { isAuth } = require("./middleWares/AuthMiddleWare");
 
-// const TodoModel = require("./models/LibraryModel");
+ 
 
-const { rateLimiting } = require("./middleWares/RateLimiting");
+const { rateLimiting } = require("./middleWares/rateLimiting");
 
 // Variables--
 
