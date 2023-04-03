@@ -1,4 +1,6 @@
 const validator = require("validator");
+const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 
 const cleanUpAndValidate = ({ name, email, username, password, phone }) => {
   return new Promise((resolve, reject) => {
@@ -32,7 +34,7 @@ const cleanUpAndValidate = ({ name, email, username, password, phone }) => {
 
 
 
-const SECRET_KEY = "This is feb nodejs class";
+const SECRET_KEY = "applications";
 
 const generateJWTToken = (email) => {
   const JWT_TOKEN = jwt.sign({ email: email }, SECRET_KEY, {
@@ -46,12 +48,12 @@ const sendVerificationToken = (email, verificationToken) => {
 
   let mailer = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465,
+    port: 8080,
     secure: true,
     service: "Gmail",
     auth: {
-      user: "kssinghkaran13@gmail.com",
-      pass: "ggoywuqiehtfdnzg",
+      user: "prashantmishraproject@gmail.com",
+      pass: "ttcxwvudcdcwennv",
     },
   });
 
@@ -59,7 +61,7 @@ const sendVerificationToken = (email, verificationToken) => {
     from: "Library Management ",
     to: email,
     subject: "Email verification for Library Management application",
-    html: `click <a href="http://localhost:8000/verify/${verificationToken}">Here</a>`,
+    html: `click the below link to verify your email<a href="http://localhost:8080/verify/${verificationToken}">Here</a>`,
   };
 
   mailer.sendMail(mailOptions, function (err, response) {

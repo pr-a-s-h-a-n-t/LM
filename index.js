@@ -73,7 +73,7 @@ const store = new mongoDbSession({
 
 app.use(
   session({
-    secret: "This is Todo app, we dont love coding",
+    secret: "Library Management application ",
     resave: false,
     saveUninitialized: false,
     store: store,
@@ -146,6 +146,7 @@ app.post("/registration", async (req, res) => {
       password: hashPassword,
       username: username,
       phone: phone,
+      emailAuthenticated: false,
     });
 
     const verificationToken = generateJWTToken(email);
@@ -186,7 +187,7 @@ app.get("/verify/:token", async (req, res) => {
     console.log(decodedData);
 
     try {
-      const userDb = await UserSchema.findOneAndUpdate(
+      const userDb = await userSchema.findOneAndUpdate(
         { email: decodedData.email },
         { emailAuthenticated: true }
       );
