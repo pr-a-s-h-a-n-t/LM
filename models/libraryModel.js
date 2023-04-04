@@ -6,24 +6,26 @@ const bookSchema = new Schema({
   title: {
     type: String,
     require: true,
+    // unique: true,
+
   },
   author: {
     type: String,
     require: true,
-    unique: true,
+    // unique: true,
   },
   price: {
     type: Number,
     require: true,
-    unique: true,
+    // unique: true,
   },
   category: {
     type: String,
-    require: true,
+    // require: true,
   },
   username: {
     type: String,
-    require: true,
+    // require: true,
   },
 } , {strict: false});
 

@@ -17,6 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
 
         .login-form>form {
@@ -31,7 +32,7 @@
         }
 
         .login-form>form>input {
-            max-width: 25rem;
+            /* max-width: 25rem; */
             height: 3rem;
             margin-bottom: 1.25rem;
             border: 1px solid black;
@@ -62,33 +63,26 @@
             text-align: center;
         }
 
-        @media screen and (max-width: 368px) {
-
-            form {
-                font-size: 12px;
-            }
-
-
-        }
-
         @media screen and (max-width: 768px) {
 
-            form {
+            form , .login_btn_wrapper{
                 font-size: 24px;
+                width: 70%;
+
             }
 
         }
 
-        @media screen and (min-width: 1268px) {
+        @media screen and (min-width: 769px) {
 
-            form {
+            form , .login_btn_wrapper{
                 font-size: 34px !important;
-                max-width: 80%;
+                width: 60%;
             }
 
-            input {
-                max-width: 25rem;
-            }
+            /* input {
+    max-width: 25rem;
+} */
 
 
         }
@@ -102,9 +96,14 @@
 
         #reg_btn,
         #rest_pass_btn {
-            width: 120px !important;
+            width: 96% !important;
             height: 3.25rem !important;
             margin: 0.5rem;
+        }
+
+        #fm,
+        #fm2 {
+            width: 50%;
         }
     </style>
 </head>
@@ -120,23 +119,23 @@
                 <label for="password">Password : </label>
                 <input type="password" placeholder="Enter Password" name="password" required>
                 <button type="submit">Login</button>
-
-                <div class="login_btn_wrapper">
-
-
-                    <form action='/registration' method="GET">
-                        <button id="reg_btn" class=" ">
-                            Create account
-                        </button>
-                    </form>
-                    <form action='/resetpassword' method="GET">
-                        <button id="rest_pass_btn" class=" ">
-                            Forgot your password?
-                        </button>
-                    </form>
-                </div>
-
             </form>
+            <div class="login_btn_wrapper">
+
+
+                <form id="fm" action='/registration' method="GET">
+                    <button id="reg_btn" class=" ">
+                        Create account
+                    </button>
+                </form>
+                <form id="fm2" action='/resetpassword' method="GET">
+                    <button id="rest_pass_btn" class=" ">
+                        Reset your password?
+                    </button>
+                </form>
+            </div>
+
+
         </div>
     </section>
 </body>

@@ -11,7 +11,7 @@
 
         .section {
             width: 100%;
-            height: 90vh;
+            /* height: 90vh; */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -21,6 +21,7 @@
 
         h1 {
             margin: auto;
+            font-size: 3rem;
         }
 
         .signup-form {
@@ -31,7 +32,7 @@
             justify-content: center;
             align-items: center;
             margin: auto;
-            width: 90%;
+            width: 100%;
         }
 
 
@@ -49,7 +50,7 @@
         }
 
         .signup-form>form>input {
-            width: 40rem;
+            /* width: 40rem; */
             height: 3rem;
             margin-bottom: 1.25rem;
             border: 1px solid black;
@@ -57,32 +58,62 @@
             padding-left: 1rem;
         }
 
-        .signup-form>form>button {}
+        @media screen and (max-width: 468px) {
 
-        
+            form{
+                font-size: 18px !important;
+                width: 90% !important;
+            }
+
+            h1 {
+                font-size: 1rem !important;
+            }
+
+        }
+
+
 
         @media screen and (max-width: 768px) {
 
-            input {
-                max-width: 60% !important;
-                height: 0.8rem;
-                margin: auto;
+            form
+              {
+                font-size: 24px;
+                width: 70%;
+
             }
 
-            #sub_btn{
-                max-width: 250px;
-                height: 3.2rem;
-                margin: auto;
+            h1 {
 
-                background-color: black !important;
-                color: white;
+                font-size: 1.5rem;
             }
 
-            label {
-                max-width: 60% !important;
-                height: 0.8rem;
-                margin: 8px auto;
+        }
+
+
+        @media screen and (min-width: 769px) {
+
+            form {
+                font-size: 34px !important;
+                width: 60%;
             }
+
+            h1 {
+
+                font-size: 2rem;
+            }
+
+            /* input {
+    max-width: 25rem;
+} */
+
+
+        }
+
+        #sub_btn {
+            max-width: 100%;
+            height: 3.2rem;
+            background-color: black;
+            color: white;
         }
     </style>
 </head>

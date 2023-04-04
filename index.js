@@ -79,7 +79,7 @@ app.use(
 
 // Routes(Note- urls are not case  sensitive they will be converted to smaller case)--
 app.get("/", (req, res) => {
-  return res.send("Welcome to  Library Management Platform");
+  return res.render("landing");
 });
 
 app.get("/registration", (req, res) => {
@@ -181,13 +181,12 @@ app.get("/verify/:token", async (req, res) => {
 
   jwt.verify(token, SECRET_KEY, async (err, decodedData) => {
     if (err) throw err;
-    
+
     try {
       const usercheckDb = await userSchema.findOne({
         email: decodedData.email,
       });
 
-      
       if (usercheckDb.resetPassword) {
         return res.status(200).redirect("/newpassword");
       } else {
@@ -206,11 +205,8 @@ app.get("/verify/:token", async (req, res) => {
         error: error,
       });
     }
-
-    
   });
 });
- 
 
 app.post("/login", async (req, res) => {
   //validate the data
@@ -289,18 +285,25 @@ app.post("/reset", async (req, res) => {
   const { loginId } = req.body;
   console.log(loginId, "reset email");
 
-  const verificationToken = generateJWTToken(loginId);
-  console.log(verificationToken, "verification token");
   try {
+    // const userExistEmail = await userSchema.findOne({ email });
+
+    // console.log(userExistEmail, "email from find one");
+    // if (!userExistEmail) {
+    //   return res.send({
+    //     status: 400,
+    //     message: "Email not found in database, please register",
+    //   });
+    // }
     const userDb = await userSchema.findOneAndUpdate(
       { email: loginId },
       { resetPassword: true }
     );
 
-    console.log(userDb, "this is user db after updating reset password");
+    const verificationToken = generateJWTToken(loginId);
+    console.log(verificationToken, "verification token");
 
     sendVerificationToken(loginId, verificationToken);
-    // console.log(userDb);
 
     return res.send({
       status: 200,
@@ -316,24 +319,25 @@ app.post("/reset", async (req, res) => {
   }
 });
 
-app.post("/updatepassword",   async (req, res) => {
+app.post("/updatepassword", async (req, res) => {
   const { password, loginId } = req.body;
-  console.log(req.body, "new Password form user");
- 
-  
+
   try {
     let saltRound = 10;
+    
     const hashPassword = await bcrypt.hash(password, saltRound);
     const userDb = await userSchema.findOneAndUpdate(
       { email: loginId },
-      { password: hashPassword }
+      { password: hashPassword, resetPassword: false }
       // { "$set": { "name": name, "genre": genre, "author": author, "similar": similar}}
     );
+
     return res.status(200).redirect("/login");
+    
   } catch (error) {
     return res.send({
       status: 500,
-      message: "Logout Failed",
+      message: "something went wrong..  ",
       error: error,
     });
   }
@@ -389,13 +393,12 @@ app.post("/create-item", isAuth, async (req, res) => {
 
   const { title, author, price, category } = req.body.book;
 
-  console.log(req.body, "ssssssssssss");
   //intialize todo schema and store it in Db
 
   // res.send("saved book: " + bookDB);
   try {
     const Book = new bookSchema({
-      tile: title,
+      title: title,
       author: author,
       price: price,
       category: category,
@@ -515,7 +518,7 @@ app.post("/delete-item", isAuth, async (req, res) => {
 
     return res.send({
       status: 200,
-      message: "Todo deleted Successfully",
+      message: "Book deleted Successfully",
       data: bookDB,
     });
   } catch (error) {

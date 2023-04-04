@@ -1,4 +1,5 @@
 let skip = 0;
+var currency = "$";
 
 document.addEventListener("click", function (event) {
   if (event.target.classList.contains("add_item")) {
@@ -33,7 +34,7 @@ document.addEventListener("click", function (event) {
       category: category.value,
     };
 
-    console.log(bookData, "book data");
+    console.log(bookData.title, "book data");
     axios
       .post("/create-item", { book: bookData })
       .then((res) => {
@@ -42,6 +43,10 @@ document.addEventListener("click", function (event) {
           alert(res.data.message);
         }
         bookData = "";
+        title.value = "";
+        author.value = "";
+        price.value = "";
+        category.value = "";
         // generateTodos();
 
         console.log(res.data, "data in browser");
@@ -51,12 +56,16 @@ document.addEventListener("click", function (event) {
           <h3 class="title"> ${res.data.data.title}</h3>
          <div class="price_author_wrapper">
           <h6 class="author">${res.data.data.author}</h6>
-          <h6 class="price" >${res.data.data.price}</h6>
+          <h6 class="price" >${res.data.data.price + "" + currency}</h6>
          </div>
         <h4 class="category">${res.data.data.category}</h4>
         <div class="btn-wrapper">
-        <button data-id="${res.data.data._id}" class="card_update_btn">Edit</button>
-        <button data-id="${res.data.data._id}"  class="card_delete_btn">Delete</button>
+        <button data-id="${
+          res.data.data._id
+        }" class="card_update_btn">Edit</button>
+        <button data-id="${
+          res.data.data._id
+        }"  class="card_delete_btn">Delete</button>
         </div>
      
     </div>`
@@ -143,12 +152,12 @@ function generateTodos() {
             <h3 class="title"> ${item.title}</h3>
            <div class="price_author_wrapper">
             <h6 class="author">${item.author}</h6>
-            <h6 class="price" >${item.price}</h6>
+            <h6 class="price" >${item.price + "" + currency}</h6>
         </div>
         <h4 class="category">${item.category}</h4>
         <div class="btn-wrapper">
           <button data-id="${item._id}" class="card_update_btn">Edit</button>
-          <button data-id="${item._id}"  class="card_delete_btn">Delete</button>
+          <button data-id="${item._id}" class="card_delete_btn">Delete</button>
           </div>
        
       </div>`;

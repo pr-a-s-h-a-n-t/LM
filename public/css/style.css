@@ -56,6 +56,12 @@ h1 {
   color: #ffffff;
   margin-bottom: 0;
 }
+.title{
+  height: 44%;
+}
+.btn-wrapper{
+  column-gap: 1rem;
+}
 
 .input-wrapper {
   display: flex;
@@ -118,7 +124,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   row-gap: 58px;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 58px;
 }
 .book_card {
