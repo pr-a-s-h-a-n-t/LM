@@ -236,8 +236,7 @@ app.post("/login", async (req, res) => {
     } else {
       userDb = await userSchema.findOne({ username: loginId });
     }
-  // console.log(userDb, "login userDb  successful");
-
+    // console.log(userDb, "login userDb  successful");
 
     if (!userDb) {
       return res.send({
@@ -453,17 +452,12 @@ app.get("/read-item", async (req, res) => {
 });
 
 app.get("/read-profile", async (req, res) => {
-
   const email = req.session.user.email;
-   
 
   // console.log(userDb, "ssssssss profile of user")
-  
- 
+
   try {
     user = await userSchema.findOne({ email: email });
-
-    
 
     if (!user)
       return res.send({
@@ -490,7 +484,7 @@ app.post("/edit-item", isAuth, async (req, res) => {
 
   const { id, field, newData } = req.body;
 
-  //data validation
+  
   if (!id || !newData) {
     return res.send({
       status: 400,
@@ -503,13 +497,6 @@ app.post("/edit-item", isAuth, async (req, res) => {
       message: "Invalid Todo format",
     });
   }
-
-  // if (newData.length > 100) {
-  //   return res.send({
-  //     status: 400,
-  //     message: "Todo is too long, should be less than 100 char.",
-  //   });
-  // }
 
   try {
     const bookDB = await bookSchema.findOneAndUpdate(

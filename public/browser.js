@@ -83,31 +83,43 @@ document.addEventListener("click", function (event) {
     const field = prompt(
       "choose from  this field- title, price(number), category, author "
     );
-    const newData = prompt("Enter your new  data ");
 
-    console.log(id, newData, "edit btn has been hit");
-    axios
-      .post("/edit-item", { id, field, newData })
-      .then((res) => {
-        if (res.data.status !== 200) {
-          console.log("ere");
-          alert("something went wrong");
-          return;
-        }
+    var conv = field.toLowerCase();
+    if (
+      conv === "title" ||
+      conv === "price" ||
+      conv === "category" ||
+      conv === "author"
+    ) {
+      const newData = prompt("Enter your new  data ");
+      axios
+        .post("/edit-item", { id, conv, newData })
+        .then((res) => {
+          if (res.data.status !== 200) {
+            console.log("ere");
+            alert("something went wrong");
+            return;
+          }
 
-        if (field === "price") {
-          let newPrice = res.data.data.price + currency;
-          let fp = document.getElementById(`${id}`);
-          fp.querySelector(`.` + field).innerHTML = newPrice;
-        } else {
-          let fp = document.getElementById(`${id}`);
-          fp.querySelector(`.` + field).innerHTML = newData;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        alert(err);
-      });
+          if (field === "price") {
+            let newPrice = res.data.data.price + currency;
+            let fp = document.getElementById(`${id}`);
+            fp.querySelector(`.` + conv).innerHTML = newPrice;
+          } else {
+            let fp = document.getElementById(`${id}`);
+            fp.querySelector(`.` + conv).innerHTML = newData;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          alert(err);
+        });
+    } else {
+      alert(
+        "Wrong field entered Please select  field from  given field value use lowercase.."
+      );
+    }
+    
   }
   if (event.target.classList.contains("card_delete_btn")) {
     const id = event.target.getAttribute("data-id");
@@ -178,19 +190,4 @@ function generateBooks() {
     });
 }
 
-// function  generateBProfile(){
-//   axios
-//   .get("/read-profile")
-//   .then((res) => {
-//     if (res.data.status !== 200) {
-//       alert(res.data.message);
-//       return;
-//     }
-//     const userData = res.data.data;
-//     console.log(userData, "sssssssssssss user in UIs");
-
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-// }
+ 
