@@ -1,4 +1,3 @@
-let skip = 0;
 var currency = "$";
 
 document.addEventListener("click", function (event) {
@@ -74,34 +73,43 @@ document.addEventListener("click", function (event) {
         console.log(err);
         alert(err);
       });
-
-    // return;
   }
 
   if (event.target.classList.contains("card_update_btn")) {
     const id = event.target.getAttribute("data-id");
     const field = prompt(
-      "choose from  this field- title, price(number), category, author "
+      "Enter Field from this list -title, price, category, author:",
+      "Type a correct field!"
     );
 
     var conv = field.toLowerCase();
+
     if (
       conv === "title" ||
       conv === "price" ||
       conv === "category" ||
       conv === "author"
     ) {
-      const newData = prompt("Enter your new  data ");
+      var newData;
+      if (conv === "price") {
+        newData = parseInt(
+          window.prompt("Enter Book Price:", "Type a number!"),
+          10
+        );
+      } else {
+        newData = prompt("Enter new Book details");
+      }
+
       axios
-        .post("/edit-item", { id, conv, newData })
+        .post("/edit-item", { id, field, newData })
         .then((res) => {
           if (res.data.status !== 200) {
             console.log("ere");
-            alert("something went wrong");
+            alert(res.data.message);
             return;
           }
 
-          if (field === "price") {
+          if (conv === "price") {
             let newPrice = res.data.data.price + currency;
             let fp = document.getElementById(`${id}`);
             fp.querySelector(`.` + conv).innerHTML = newPrice;
@@ -116,11 +124,11 @@ document.addEventListener("click", function (event) {
         });
     } else {
       alert(
-        "Wrong field entered Please select  field from  given field value use lowercase.."
+        "Wrong field entered Please select  field from this list - title, price, category, author"
       );
     }
-    
   }
+
   if (event.target.classList.contains("card_delete_btn")) {
     const id = event.target.getAttribute("data-id");
 
@@ -154,7 +162,6 @@ window.onload = function () {
 };
 
 function generateBooks() {
-  //read the todos
   axios
     .get("/read-item")
     .then((res) => {
@@ -163,7 +170,7 @@ function generateBooks() {
         return;
       }
       const apple = res.data.data;
-      console.log(apple, "ssssssssssssss");
+
       document.getElementById("cards_wrapper").insertAdjacentHTML(
         "beforeend",
         apple
@@ -189,5 +196,3 @@ function generateBooks() {
       console.log(err);
     });
 }
-
- 

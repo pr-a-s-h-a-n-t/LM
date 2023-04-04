@@ -480,21 +480,23 @@ app.get("/read-profile", async (req, res) => {
 });
 
 app.post("/edit-item", isAuth, async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
-  const { id, field, newData } = req.body;
+  let { id, field, newData } = req.body;
 
-  
-  if (!id || !newData) {
+  field = field.toLowerCase();
+
+  if (field === "price" && newData === null) {
+    return res.send({
+      status: 400,
+      message: "Invalid input format",
+    });
+  }
+
+  if (!id || !newData || !field) {
     return res.send({
       status: 400,
       message: "Missing credentials",
-    });
-  }
-  if (typeof newData !== "string") {
-    return res.send({
-      status: 400,
-      message: "Invalid Todo format",
     });
   }
 
@@ -511,7 +513,7 @@ app.post("/edit-item", isAuth, async (req, res) => {
       data: temp,
     });
   } catch (error) {
-    console.log(error, "dddddd");
+    console.log(error, "error from backend");
     return res.send({
       status: 500,
       message: "Database error",
