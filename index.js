@@ -286,15 +286,15 @@ app.post("/reset", async (req, res) => {
   console.log(loginId, "reset email");
 
   try {
-    // const userExistEmail = await userSchema.findOne({ email });
+    const userExistEmail = await userSchema.findOne({ email: loginId });
 
-    // console.log(userExistEmail, "email from find one");
-    // if (!userExistEmail) {
-    //   return res.send({
-    //     status: 400,
-    //     message: "Email not found in database, please register",
-    //   });
-    // }
+    console.log(userExistEmail, "email from find one");
+    if (!userExistEmail) {
+      return res.send({
+        status: 400,
+        message: "Email not found in database, please register",
+      });
+    }
     const userDb = await userSchema.findOneAndUpdate(
       { email: loginId },
       { resetPassword: true }
@@ -313,7 +313,7 @@ app.post("/reset", async (req, res) => {
   } catch (error) {
     return res.send({
       status: 400,
-      message: "Invalid email ",
+      message: "Invalid email  ",
       error: error,
     });
   }
@@ -324,7 +324,7 @@ app.post("/updatepassword", async (req, res) => {
 
   try {
     let saltRound = 10;
-    
+
     const hashPassword = await bcrypt.hash(password, saltRound);
     const userDb = await userSchema.findOneAndUpdate(
       { email: loginId },
@@ -333,7 +333,6 @@ app.post("/updatepassword", async (req, res) => {
     );
 
     return res.status(200).redirect("/login");
-    
   } catch (error) {
     return res.send({
       status: 500,
