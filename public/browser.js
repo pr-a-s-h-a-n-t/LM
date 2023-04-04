@@ -47,7 +47,6 @@ document.addEventListener("click", function (event) {
         author.value = "";
         price.value = "";
         category.value = "";
-        // generateTodos();
 
         console.log(res.data, "data in browser");
         document.getElementById("cards_wrapper").insertAdjacentHTML(
@@ -56,7 +55,7 @@ document.addEventListener("click", function (event) {
           <h3 class="title"> ${res.data.data.title}</h3>
          <div class="price_author_wrapper">
           <h6 class="author">${res.data.data.author}</h6>
-          <h6 class="price" >${res.data.data.price + "" + currency} </h6>
+          <h6 class="price" >${res.data.data.price + "" + currency}  </h6>
          </div>
         <h4 class="category">${res.data.data.category}</h4>
         <div class="btn-wrapper">
@@ -81,8 +80,10 @@ document.addEventListener("click", function (event) {
 
   if (event.target.classList.contains("card_update_btn")) {
     const id = event.target.getAttribute("data-id");
-    const field = prompt("choose your field");
-    const newData = prompt("Enter your new todo text");
+    const field = prompt(
+      "choose from  this field- title, price(number), category, author "
+    );
+    const newData = prompt("Enter your new  data ");
 
     console.log(id, newData, "edit btn has been hit");
     axios
@@ -90,13 +91,18 @@ document.addEventListener("click", function (event) {
       .then((res) => {
         if (res.data.status !== 200) {
           console.log("ere");
-          alert(res.data.message);
+          alert("something went wrong");
           return;
         }
 
-        let fp = document.getElementById(`${id}`);
-        fp.querySelector(`.` + field).innerHTML = newData;
-        
+        if (field === "price") {
+          let newPrice = res.data.data.price + currency;
+          let fp = document.getElementById(`${id}`);
+          fp.querySelector(`.` + field).innerHTML = newPrice;
+        } else {
+          let fp = document.getElementById(`${id}`);
+          fp.querySelector(`.` + field).innerHTML = newData;
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -172,8 +178,6 @@ function generateBooks() {
     });
 }
 
-
-
 // function  generateBProfile(){
 //   axios
 //   .get("/read-profile")
@@ -184,10 +188,9 @@ function generateBooks() {
 //     }
 //     const userData = res.data.data;
 //     console.log(userData, "sssssssssssss user in UIs");
-    
+
 //   })
 //   .catch((err) => {
 //     console.log(err);
 //   });
 // }
- 
