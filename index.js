@@ -210,7 +210,7 @@ app.get("/verify/:token", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   //validate the data
-  console.log(req.body);
+  // console.log(req.body, "login successful");
   const { loginId, password } = req.body;
 
   if (!loginId || !password) {
@@ -236,6 +236,8 @@ app.post("/login", async (req, res) => {
     } else {
       userDb = await userSchema.findOne({ username: loginId });
     }
+  // console.log(userDb, "login userDb  successful");
+
 
     if (!userDb) {
       return res.send({
@@ -433,13 +435,46 @@ app.get("/read-item", async (req, res) => {
     if (book.length === 0)
       return res.send({
         status: 200,
-        message: "Todo is empty, Please create some.",
+        message: "Library is empty, Please add some books.",
       });
 
     return res.send({
       status: 200,
       message: "Read Success",
       data: book,
+    });
+  } catch (error) {
+    return res.send({
+      status: 500,
+      message: "Database error",
+      error: error,
+    });
+  }
+});
+
+app.get("/read-profile", async (req, res) => {
+
+  const email = req.session.user.email;
+   
+
+  // console.log(userDb, "ssssssss profile of user")
+  
+ 
+  try {
+    user = await userSchema.findOne({ email: email });
+
+    
+
+    if (!user)
+      return res.send({
+        status: 200,
+        message: "no user found.",
+      });
+
+    return res.send({
+      status: 200,
+      message: "Read Success",
+      data: user,
     });
   } catch (error) {
     return res.send({

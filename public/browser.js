@@ -56,7 +56,7 @@ document.addEventListener("click", function (event) {
           <h3 class="title"> ${res.data.data.title}</h3>
          <div class="price_author_wrapper">
           <h6 class="author">${res.data.data.author}</h6>
-          <h6 class="price" >${res.data.data.price + "" + currency}</h6>
+          <h6 class="price" >${res.data.data.price + "" + currency} </h6>
          </div>
         <h4 class="category">${res.data.data.category}</h4>
         <div class="btn-wrapper">
@@ -96,6 +96,7 @@ document.addEventListener("click", function (event) {
 
         let fp = document.getElementById(`${id}`);
         fp.querySelector(`.` + field).innerHTML = newData;
+        
       })
       .catch((err) => {
         console.log(err);
@@ -130,10 +131,11 @@ document.addEventListener("click", function (event) {
 });
 
 window.onload = function () {
-  generateTodos();
+  generateBooks();
+  // generateBProfile();
 };
 
-function generateTodos() {
+function generateBooks() {
   //read the todos
   axios
     .get("/read-item")
@@ -169,3 +171,23 @@ function generateTodos() {
       console.log(err);
     });
 }
+
+
+
+// function  generateBProfile(){
+//   axios
+//   .get("/read-profile")
+//   .then((res) => {
+//     if (res.data.status !== 200) {
+//       alert(res.data.message);
+//       return;
+//     }
+//     const userData = res.data.data;
+//     console.log(userData, "sssssssssssss user in UIs");
+    
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+// }
+ 
