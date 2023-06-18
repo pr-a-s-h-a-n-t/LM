@@ -79,7 +79,7 @@ app.use(
 
 // Routes(Note- urls are not case  sensitive they will be converted to smaller case)--
 app.get("/", (req, res) => {
-  return res.render("landing");
+  return res.render("login");
 });
 
 app.get("/registration", (req, res) => {
